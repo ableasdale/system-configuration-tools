@@ -68,26 +68,3 @@
 	<!--  END Forest rebalancer specific ANT Tasks -->
 
 </project>
-<!--
-	<typedef uri="http://www.marklogic.com/ant" resource="com/marklogic/ant/antlib.xml" classpathref="mlant-classpath" />
-
-	<property name="xccstring" value="xcc://admin:admin@localhost:8003/Modules" />
-
-	<target name="delete-application-modules">
-		<echo message="Deleting Application Modules (TODO)" />
-	</target>
-
-	<target name="load-application-modules" depends="delete-application-modules">
-		
-
-		<ml:load xccurl="${xccstring}">
-			<ml:docset destdir="${destination.directory}">
-				<fileset dir="resources/xquery" includes="**/*" />
-			</ml:docset>
-		</ml:load>
-	</target>
-
-	 Ant's built-in properties as described in Ant manual at  
-	       http://ant.apache.org/manual/using.html#built-in-props. -->
-
-
