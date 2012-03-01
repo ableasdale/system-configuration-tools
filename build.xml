@@ -38,12 +38,13 @@
 		<ml:load xccurl="${xccstring}/Modules">
 			<ml:docset>
 				<!-- destdir="/test-dir/"> -->
-				<!-- ml:permissionset>
-					<ml:permission role="nobody" permission="execute" />
-					<ml:permission role="nobody" permission="insert" />
-					<ml:permission role="nobody" permission="read" />
-					<ml:permission role="nobody" permission="update" />
-				</ml:permissionset -->
+				<!-- using a built in role - TODO - add a generic role to this process -->
+				<ml:permissionset>
+					<ml:permission role="app-user" permission="execute" />
+					<ml:permission role="app-user" permission="insert" />
+					<ml:permission role="app-user" permission="read" />
+					<ml:permission role="app-user" permission="update" />
+				</ml:permissionset>
 				<ml:collectionset>
 					<ml:collection name="rebalancer" />
 				</ml:collectionset>
