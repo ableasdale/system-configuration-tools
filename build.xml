@@ -50,7 +50,7 @@
 
 	<!--  Forest rebalancer specific ANT Tasks -->
 
-	<target name="install-rebalancer-modules" depends="delete-rebalancer-modules">
+	<target name="install-rebalancer-modules" depends="delete-rebalancer-modules"  description="Install rebalancer content and modules">
 		<echo message="Loading Rebalancer Application Modules" />
 		<ml:load xccurl="${xccstring}/Modules">
 			<ml:docset>
@@ -80,7 +80,7 @@
 
 	<!--  END Forest rebalancer specific ANT Tasks -->
 
-	<!-- placeholders - TODO - delete -->
+	<!-- placeholders for default task - TODO - delete -->
 	<target name="test-query">
 		<ml:query xccurl="${xccstring}/Modules" query="xdmp:estimate(doc())" />
 	</target>
