@@ -19,6 +19,42 @@
 
 	<typedef uri="http://www.marklogic.com/ant" resource="com/marklogic/ant/antlib.xml" classpathref="mlant-classpath" />
 
+	<target name="create-custom-security-model" description="Creates a generic security model">
+		<!-- antcall target="administer-security-model">
+			<param name="param" value="1" />
+		</antcall -->
+		<antcall target="administer-security-model">
+			<param name="param" value="2" />
+		</antcall>
+
+		<antcall target="administer-security-model">
+			<param name="param" value="3" />
+		</antcall>
+	</target>
+
+
+	<target name="administer-security-model">
+		<ml:query xccurl="${xccstring}/Security">
+			<!-- roles -->
+			<fileset file="resources/xquery/config/create-security-model.xqy" />
+			<ml:paramset>
+				<ml:param name="STEP" ns="" type="integer" value="${param}" />
+			</ml:paramset>
+		</ml:query>
+	</target>
+
+
+
+	<!-- privs 
+					<fileset file="resources/xquery/config/create-security-model.xqy" / -->
+	<!-- users
+					<fileset file="resources/xquery/config/create-security-model.xqy" / -->
+
+
+	<!-- target name="remove-custom-security-model" description="Removes the generic security model">
+		
+	</target -->
+
 	<target name="test-query">
 		<ml:query xccurl="${xccstring}/Modules" query="xdmp:estimate(doc())" />
 	</target>
@@ -37,13 +73,11 @@
 		<echo message="Loading Rebalancer Application Modules" />
 		<ml:load xccurl="${xccstring}/Modules">
 			<ml:docset>
-				<!-- destdir="/test-dir/"> -->
-				<!-- using a built in role - TODO - add a generic role to this process -->
 				<ml:permissionset>
-					<ml:permission role="app-user" permission="execute" />
-					<ml:permission role="app-user" permission="insert" />
-					<ml:permission role="app-user" permission="read" />
-					<ml:permission role="app-user" permission="update" />
+					<ml:permission role="execute-read-role" permission="execute" />
+					<ml:permission role="insert-update-role" permission="insert" />
+					<ml:permission role="execute-read-role" permission="read" />
+					<ml:permission role="insert-update-role" permission="update" />
 				</ml:permissionset>
 				<ml:collectionset>
 					<ml:collection name="rebalancer" />
@@ -57,12 +91,12 @@
 		<echo message="Deleting Application Modules" />
 		<ml:delete xccurl="${xccstring}/Modules" collections="rebalancer" failonerror="false" />
 	</target>
-	
+
 	<target name="clean-rebalancer">
 		<antcall target="delete-rebalancer-modules" />
-		<echo message="All Rebalancer Application Modules are now removed..." />		
-	</target>	
-	
+		<echo message="All Rebalancer Application Modules are now removed..." />
+	</target>
+
 	<!--  END Forest rebalancer specific ANT Tasks -->
 
 </project>
