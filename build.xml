@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="jp-ant-setup" default="test-query" basedir="." xmlns:ml="http://www.marklogic.com/ant">
+
+	<!--Set the property for xccstring used to connect to MarkLogic database-->
+	<property name="xccstring" value="xcc://admin:admin@localhost:9999" />
+	<property name="modules" value="Modules" />
+	<property name="lib-dir" value="lib/" />
+	<property name="destination.directory" value="/users/" />
+	<property name="call.to.jvm" value="java -Xincgc"/>
+
+	<path id="mlant-classpath">
+		<fileset dir="${lib-dir}">
+			<include name="xcc.jar" />
+			<include name="mlant.jar" />
+			<include name="saxon.jar" />
+			<include name="xqdoc-ml.jar" />
+		</fileset>
+	</path>
+
+	<typedef uri="http://www.marklogic.com/ant" resource="com/marklogic/ant/antlib.xml" classpathref="mlant-classpath" />
+
+	<target name="test-query">
+		<ml:query xccurl="${xccstring}/Modules" query="xdmp:estimate(doc())" />
+	</target>
+
+	<target name="test-query-fileset">
+		<ml:query xccurl="${xccstring}" output="resources/output.txt">
+			<fileset file="resources/xquery/simple*.xqy">
+			</fileset>
+		</ml:query>
+	</target>
+
+
+	<!--  Forest rebalancer specific ANT Tasks -->
+
+	<target name="install-rebalancer-modules" depends="delete-rebalancer-modules">
+		<echo message="Loading Rebalancer Application Modules" />
+		<ml:load xccurl="${xccstring}/Modules">
+			<ml:docset>
+				<!-- destdir="/test-dir/"> -->
+				<!-- ml:permissionset>
+					<ml:permission role="nobody" permission="execute" />
+					<ml:permission role="nobody" permission="insert" />
+					<ml:permission role="nobody" permission="read" />
+					<ml:permission role="nobody" permission="update" />
+				</ml:permissionset -->
+				<ml:collectionset>
+					<ml:collection name="collection1" />
+					<ml:collection name="collection2" />
+				</ml:collectionset>
+				<fileset dir="resources/xquery/rebalancer" includes="**/*.xqy" />
+			</ml:docset>
+		</ml:load>
+	</target>
+
+	<!--   <ml:delete xccurl="${xccstring}"
+    documents="/path/to/doc1.xml,/path/to/doc2.xml"
+    directories="/dir1/,/dir2/"
+    collections="collection1,collection2"
+    failonerror="false"
+  /> -->
+
+	<target name="delete-rebalancer-modules">
+		<echo message="Deleting Application Modules" />
+		<ml:delete xccurl="${xccstring}/Modules" directories="/" collections="collection1,collection2" failonerror="false" />
+	</target>
+
+	<!--  END Forest rebalancer specific ANT Tasks -->
+
+</project>
+<!--
+	<typedef uri="http://www.marklogic.com/ant" resource="com/marklogic/ant/antlib.xml" classpathref="mlant-classpath" />
+
+	<property name="xccstring" value="xcc://admin:admin@localhost:8003/Modules" />
+
+	<target name="delete-application-modules">
+		<echo message="Deleting Application Modules (TODO)" />
+	</target>
+
+	<target name="load-application-modules" depends="delete-application-modules">
+		
+
+		<ml:load xccurl="${xccstring}">
+			<ml:docset destdir="${destination.directory}">
+				<fileset dir="resources/xquery" includes="**/*" />
+			</ml:docset>
+		</ml:load>
+	</target>
+
+	 Ant's built-in properties as described in Ant manual at  
+	       http://ant.apache.org/manual/using.html#built-in-props. -->
+
+
