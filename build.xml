@@ -48,17 +48,6 @@
 	//TODO 		
 	</target -->
 
-	<target name="test-query">
-		<ml:query xccurl="${xccstring}/Modules" query="xdmp:estimate(doc())" />
-	</target>
-
-	<target name="test-query-fileset">
-		<ml:query xccurl="${xccstring}" output="resources/output.txt">
-			<fileset file="resources/xquery/simple*.xqy">
-			</fileset>
-		</ml:query>
-	</target>
-
 	<!--  Forest rebalancer specific ANT Tasks -->
 
 	<target name="install-rebalancer-modules" depends="delete-rebalancer-modules">
@@ -90,4 +79,17 @@
 	</target>
 
 	<!--  END Forest rebalancer specific ANT Tasks -->
+
+	<!-- placeholders - TODO - delete -->
+	<target name="test-query">
+		<ml:query xccurl="${xccstring}/Modules" query="xdmp:estimate(doc())" />
+	</target>
+
+	<target name="test-query-fileset">
+		<ml:query xccurl="${xccstring}" output="resources/output.txt">
+			<fileset file="resources/xquery/simple*.xqy">
+			</fileset>
+		</ml:query>
+	</target>
+
 </project>
