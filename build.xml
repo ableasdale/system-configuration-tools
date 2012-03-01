@@ -56,7 +56,12 @@
 		<echo message="Deleting Application Modules" />
 		<ml:delete xccurl="${xccstring}/Modules" collections="rebalancer" failonerror="false" />
 	</target>
-
+	
+	<target name="clean-rebalancer">
+		<antcall target="delete-rebalancer-modules" />
+		<echo message="All Rebalancer Application Modules are now removed..." />		
+	</target>	
+	
 	<!--  END Forest rebalancer specific ANT Tasks -->
 
 </project>
