@@ -20,13 +20,15 @@
 	<typedef uri="http://www.marklogic.com/ant" resource="com/marklogic/ant/antlib.xml" classpathref="mlant-classpath" />
 
 	<target name="create-custom-security-model" description="Creates a generic security model">
-		<!-- antcall target="administer-security-model">
+		<!-- Create Roles -->
+		<antcall target="administer-security-model">
 			<param name="param" value="1" />
-		</antcall -->
+		</antcall>
+		<!-- Create Permissions -->
 		<antcall target="administer-security-model">
 			<param name="param" value="2" />
 		</antcall>
-
+		<!-- Create Users -->
 		<antcall target="administer-security-model">
 			<param name="param" value="3" />
 		</antcall>
@@ -45,7 +47,7 @@
 
 
 	<!-- target name="remove-custom-security-model" description="Removes the generic security model">
-		// TODO 		
+	//TODO 		
 	</target -->
 
 	<target name="test-query">

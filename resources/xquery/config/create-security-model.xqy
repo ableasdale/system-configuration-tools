@@ -42,11 +42,11 @@ declare function local:create-roles() as xs:unsignedLong+ {
     (: Create Insert/Update Role :)
     (if(not(sec:role-exists($INSERT-UPDATE-ROLE-NAME))) 
     then(sec:create-role($INSERT-UPDATE-ROLE-NAME,$INSERT-UPDATE-ROLE-DESCRIPTION,(),(),()))
-    else(),
+    else(0),
     (: Create Execute/Read Role :)
     if(not(sec:role-exists($EXECUTE-READ-ROLE-NAME)))
     then(sec:create-role($EXECUTE-READ-ROLE-NAME,$EXECUTE-READ-ROLE-DESCRIPTION,(),(),()))
-    else())
+    else(0))
 };
  
 (:~
