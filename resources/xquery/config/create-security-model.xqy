@@ -148,5 +148,4 @@ else if($STEP eq 2)
     then(local:create-privileges())
 else if($STEP eq 3)
     then(local:create-users())
-else()
-    
+else()  

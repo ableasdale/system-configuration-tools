@@ -34,7 +34,6 @@
 		</antcall>
 	</target>
 
-
 	<target name="administer-security-model">
 		<ml:query xccurl="${xccstring}/Security">
 			<!-- roles -->
@@ -44,7 +43,6 @@
 			</ml:paramset>
 		</ml:query>
 	</target>
-
 
 	<!-- target name="remove-custom-security-model" description="Removes the generic security model">
 	//TODO 		
@@ -60,7 +58,6 @@
 			</fileset>
 		</ml:query>
 	</target>
-
 
 	<!--  Forest rebalancer specific ANT Tasks -->
 
@@ -93,5 +90,4 @@
 	</target>
 
 	<!--  END Forest rebalancer specific ANT Tasks -->
-
 </project>
