@@ -44,15 +44,8 @@
 	</target>
 
 
-
-	<!-- privs 
-					<fileset file="resources/xquery/config/create-security-model.xqy" / -->
-	<!-- users
-					<fileset file="resources/xquery/config/create-security-model.xqy" / -->
-
-
 	<!-- target name="remove-custom-security-model" description="Removes the generic security model">
-		
+		// TODO 		
 	</target -->
 
 	<target name="test-query">
