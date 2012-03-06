@@ -21,7 +21,7 @@
 
 	<typedef uri="http://www.marklogic.com/ant" resource="com/marklogic/ant/antlib.xml" classpathref="mlant-classpath" />
 
-	<target name="create-custom-security-model" description="Creates a generic security model with 2 user roles (read and update)">
+	<target name="create-custom-security-model" description="Creates a generic security model with 2 basic user roles (read and update)">
 		<!-- Create Roles -->
 		<antcall target="administer-security-model">
 			<param name="param" value="1" />
@@ -52,7 +52,7 @@
 
 	<!--  Forest rebalancer specific ANT Tasks -->
 
-	<target name="install-rebalancer-modules" depends="delete-rebalancer-modules" description="Install rebalancer content and modules">
+	<target name="install-rebalancer-modules" depends="delete-rebalancer-modules" description="Install XQSync rebalancer modules">
 		<echo message="Loading Rebalancer Application Modules" />
 		<ml:load xccurl="${xccstring}/Modules">
 			<ml:docset>
@@ -87,7 +87,7 @@
 		<ml:query xccurl="${xccstring}/Modules" query="xdmp:estimate(doc())" />
 	</target>
 
-	<target name="create-xqsync-properties-files">
+	<target name="create-xqsync-properties-files" description="Generates the necessary .properties files for each host in the cluster so XQSync can run against each host and its local forests">
 		<ml:query xccurl="${xccstring}">
 			<fileset file="resources/xquery/config/generate-xqsync-properties.xqy" />
 			<ml:paramset>
