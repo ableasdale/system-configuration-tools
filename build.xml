@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="system-configuration-tools" default="test-query" basedir="." xmlns:ml="http://www.marklogic.com/ant">
 
-	<!--Set the property for xccstring used to connect to MarkLogic database-->
+	<!--Set the property for xccstring used to connect to MarkLogic database
+	<property name="xccstring" value="xcc://q:q@localhost:9000" />
+	-->
 	<property name="xccstring" value="xcc://admin:admin@localhost:9999" />
 	<property name="modules" value="Modules" />
 	<property name="lib-dir" value="lib/" />
@@ -19,7 +21,7 @@
 
 	<typedef uri="http://www.marklogic.com/ant" resource="com/marklogic/ant/antlib.xml" classpathref="mlant-classpath" />
 
-	<target name="create-custom-security-model" description="Creates a generic security model">
+	<target name="create-custom-security-model" description="Creates a generic security model with 2 user roles (read and update)">
 		<!-- Create Roles -->
 		<antcall target="administer-security-model">
 			<param name="param" value="1" />
@@ -68,7 +70,7 @@
 		</ml:load>
 	</target>
 
-	<target name="delete-rebalancer-modules">
+	<target name="delete-rebalancer-modules" description="Removes unnecessary modules after the rebalancer process has run to completion">
 		<echo message="Deleting Application Modules" />
 		<ml:delete xccurl="${xccstring}/Modules" collections="rebalancer" failonerror="false" />
 	</target>
