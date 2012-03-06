@@ -50,7 +50,7 @@
 
 	<!--  Forest rebalancer specific ANT Tasks -->
 
-	<target name="install-rebalancer-modules" depends="delete-rebalancer-modules"  description="Install rebalancer content and modules">
+	<target name="install-rebalancer-modules" depends="delete-rebalancer-modules" description="Install rebalancer content and modules">
 		<echo message="Loading Rebalancer Application Modules" />
 		<ml:load xccurl="${xccstring}/Modules">
 			<ml:docset>
@@ -83,6 +83,18 @@
 	<!-- placeholders for default task - TODO - delete -->
 	<target name="test-query">
 		<ml:query xccurl="${xccstring}/Modules" query="xdmp:estimate(doc())" />
+	</target>
+
+	<target name="create-xqsync-properties-files">
+		<ml:query xccurl="${xccstring}">
+			<fileset file="resources/xquery/config/generate-xqsync-properties.xqy" />
+			<ml:paramset>
+				<ml:param name="INPUT-DATABASE" ns="" type="string" value="Documents" />
+				<ml:param name="INPUT-PORT" ns="" type="string" value="9999" />
+				<ml:param name="OUTPUT-DATABASE" ns="" type="string" value="ForestRebalance" />
+				<ml:param name="OUTPUT-PORT" ns="" type="string" value="9998" />
+			</ml:paramset>
+		</ml:query>
 	</target>
 
 </project>

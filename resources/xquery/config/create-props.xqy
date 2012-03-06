@@ -2,9 +2,15 @@
 
 declare namespace fs="http://marklogic.com/xdmp/status/forest";
 
-let $db-name := xdmp:database-name(xdmp:database())
+declare variable $DB-NAME as xs:string external;
+declare variable $PATH-SEGMENT as xs:string external;
+declare variable $PORT as xs:string external;
+(: declare variable $DB-NAME as xs:string external; :)
+
+
+(: let $db-name := xdmp:database-name(xdmp:database()) :)
 for $f in xdmp:database-forests(xdmp:database())
-let $path := concat('/tmp/xqsync-forest-', xdmp:forest-name($f), '.properties') let $host := xdmp:host-name(xdmp:forest-status($f)/fs:host-id)
+let $path := concat($PATH-SEGMENT, xdmp:forest-name($f), '.properties') let $host := xdmp:host-name(xdmp:forest-status($f)/fs:host-id)
 return xdmp:save(
   $path,
   text {
@@ -14,6 +20,8 @@ return xdmp:save(
       'FOREST', string($f)),
      replace(
        replace(
-         'INPUT_CONNECTION_STRING=xcc://HOST:9000/DATABASE',
+         concat("INPUT_CONNECTION_STRING=xcc://HOST:",$PORT,"/DATABASE"),
          'HOST', $host),
-       'DATABASE', $db-name), ''), codepoints-to-string(10))})
+       'DATABASE', $DB-NAME), ''), codepoints-to-string(10)),"
+READ_PERMISSION_ROLES=ODSExecuteReadRole
+UPDATE_PERMISSION_ROLES=ODSInsertUpdateRole"})
