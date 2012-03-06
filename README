@@ -1,0 +1,11 @@
+ant -p
+Buildfile: /system-configuration-tools/build.xml
+
+Main targets:
+
+ create-custom-security-model    Creates a generic security model with 2 basic user roles (read and update)
+ create-xqsync-properties-files  Generates the necessary .properties files for each host in the cluster so XQSync can run against each host and its local forests
+ delete-rebalancer-modules       Removes unnecessary modules after the rebalancer process has run to completion
+ install-rebalancer-modules      Install XQSync rebalancer modules
+ 
+Default target: test-query
