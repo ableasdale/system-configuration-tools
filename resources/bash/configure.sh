@@ -3,7 +3,7 @@ BASE_FOLDER=/mnt
 
 i=0; for h in ${HOSTS[@]}; do
         scp -r rebalance root@$h:$BASE_FOLDER
-        scp $h.ec2.internal/*.properties root@$h:$BASE_FOLDER/rebalance
+        scp /tmp/$h*.properties root@$h:$BASE_FOLDER/rebalance
 done
 
 i=0; (for h in ${HOSTS[@]}; do echo screen -t \"screen $i\" $i bash -c '"'ssh $h "'"cd $BASE_FOLDER/rebalance \&\& ./run.sh\; echo hit return\; read"'" '"'; i=$((i = i + 1)); done; echo screen $i) > screen-commands

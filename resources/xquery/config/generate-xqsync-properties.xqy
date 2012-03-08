@@ -49,11 +49,12 @@ ALLOW_EMPTY_METADATA=true
 THREADS=64
 PRINT_CURRENT_RATE=true
 HASH_MODULE=computehash.xqy
+FATAL_ERRORS=false
 
 READ_PERMISSION_ROLES=execute-read-role
 UPDATE_PERMISSION_ROLES=insert-update-role
 
-INPUT_BATCH_SIZE=100
+INPUT_BATCH_SIZE=10
 USE_IN_FOREST_EVAL=true'),
        'host-name', xdmp:host-name($h)),
        'forest', string($f)), ''), codepoints-to-string(10)), 
