@@ -47,7 +47,6 @@
 	</target>
 
 	<!-- target name="remove-custom-security-model" description="Removes the generic security model">
-	//TODO 		
 	</target -->
 
 	<!--  Forest rebalancer specific ANT Tasks -->
@@ -84,6 +83,10 @@
 
 	<target name="distribute-xqsync-runscripts" description="Distributes the XQSync jars, properties and runscripts to all hosts in the cluster" depends="create-xqsync-properties-files">
 		<echo message="Distributing XQSync..." />
+		<exec executable="/bin/bash">
+			<arg value="resources/bash/configure.sh"/>
+			<!-- arg value="/tmp"/ -->
+		</exec>
 	</target>
 
 	<target name="delete-rebalancer-modules" description="Removes unnecessary modules after the rebalancer process has run to completion">
