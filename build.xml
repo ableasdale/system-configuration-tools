@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="system-configuration-tools" default="test-query" basedir="." xmlns:ml="http://www.marklogic.com/ant">
+<project name="system-configuration-tools" default="test-connection" basedir="." xmlns:ml="http://www.marklogic.com/ant">
 
 	<!--Set the property for xccstring used to connect to MarkLogic database
 	<property name="xccstring" value="xcc://q:q@localhost:9000" />
@@ -70,6 +70,22 @@
 		</ml:load>
 	</target>
 
+	<target name="create-xqsync-properties-files" description="Generates the necessary .properties files for each host in the cluster so XQSync can run against each host and its local forests">
+		<ml:query xccurl="${xccstring}">
+			<fileset file="resources/xquery/config/generate-xqsync-properties.xqy" />
+			<ml:paramset>
+				<ml:param name="INPUT-DATABASE" ns="" type="string" value="Documents" />
+				<ml:param name="INPUT-PORT" ns="" type="string" value="9999" />
+				<ml:param name="OUTPUT-DATABASE" ns="" type="string" value="ForestRebalance" />
+				<ml:param name="OUTPUT-PORT" ns="" type="string" value="9998" />
+			</ml:paramset>
+		</ml:query>
+	</target>
+
+	<target name="distribute-xqsync-runscripts" description="Distributes the XQSync jars, properties and runscripts to all hosts in the cluster" depends="create-xqsync-properties-files">
+		<echo message="Distributing XQSync..." />
+	</target>
+
 	<target name="delete-rebalancer-modules" description="Removes unnecessary modules after the rebalancer process has run to completion">
 		<echo message="Deleting Application Modules" />
 		<ml:delete xccurl="${xccstring}/Modules" collections="rebalancer" failonerror="false" />
@@ -82,21 +98,8 @@
 
 	<!--  END Forest rebalancer specific ANT Tasks -->
 
-	<!-- placeholders for default task - TODO - delete -->
-	<target name="test-query">
+	<target name="test-connection">
 		<ml:query xccurl="${xccstring}/Modules" query="xdmp:estimate(doc())" />
-	</target>
-
-	<target name="create-xqsync-properties-files" description="Generates the necessary .properties files for each host in the cluster so XQSync can run against each host and its local forests">
-		<ml:query xccurl="${xccstring}">
-			<fileset file="resources/xquery/config/generate-xqsync-properties.xqy" />
-			<ml:paramset>
-				<ml:param name="INPUT-DATABASE" ns="" type="string" value="Documents" />
-				<ml:param name="INPUT-PORT" ns="" type="string" value="9999" />
-				<ml:param name="OUTPUT-DATABASE" ns="" type="string" value="ForestRebalance" />
-				<ml:param name="OUTPUT-PORT" ns="" type="string" value="9998" />
-			</ml:paramset>
-		</ml:query>
 	</target>
 
 </project>
