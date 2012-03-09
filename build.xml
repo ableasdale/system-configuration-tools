@@ -103,7 +103,7 @@
 		<ml:delete xccurl="${xccstring}/${modules}" collections="rebalancer" failonerror="false" />
 	</target>
 
-	<target name="clean-rebalancer">
+	<target name="clean-rebalancer" depends="clean" description="removes all files including the installed XQSync rebalancer module">
 		<antcall target="delete-rebalancer-modules" />
 		<echo message="All Rebalancer Application Modules are now removed..." />
 	</target>
@@ -116,7 +116,7 @@
 	</target>
 
 	<target name="clean">
-		<echo message="Clean - removing all configuration files/folders from the cluster..." />
+		<echo message="Clean - removing all configuration files/folders from the cluster - excluding anything inside MarkLogic" />
 		<delete dir="dist" />
 		<exec executable="/bin/bash">
 			<arg value="resources/bash/clean.sh" />
