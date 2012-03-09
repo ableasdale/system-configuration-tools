@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="system-configuration-tools" default="test-connection" basedir="." xmlns:ml="http://www.marklogic.com/ant">
 
-	<!--Set the property for xccstring used to connect to MarkLogic database -->
-	<property name="xccstring" value="xcc://admin:admin@localhost:9999" />
+	<!--Set the property for xccstring used to connect to MarkLogic database 
+	<property name="xccstring" value="xcc://admin:admin@localhost:9999" -->
 
-	<!-- property name="xccstring" value="xcc://q:q@localhost:9000" / -->
+	<property name="xccstring" value="xcc://q:q@localhost:9000" />
 
+	<property name="base-xqsync-folder" value="/mnt" />
 	<property name="modules" value="Modules" />
 	<property name="lib-dir" value="lib/" />
 	<property name="destination.directory" value="/users/" />
@@ -91,7 +92,7 @@
 		<echo message="Distributing XQSync dependent files and .properties..." />
 		<exec executable="/bin/bash">
 			<arg value="resources/bash/configure.sh" />
-			<!-- arg value="/tmp"/ -->
+			<arg value="${base-xqsync-folder}" />
 		</exec>
 	</target>
 
