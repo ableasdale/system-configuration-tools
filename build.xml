@@ -112,11 +112,11 @@
 
 	<target name="test-connection">
 		<echo message="Testing your xcc connection to: ${xccstring}" />
-		<ml:query xccurl="${xccstring}/${modules}" query="xdmp:estimate(doc())" />
+		<ml:query xccurl="${xccstring}" query="xdmp:estimate(doc())" />
 	</target>
 
 	<target name="clean">
-		<echo message="Clean - removing dist folder ..."/>
+		<echo message="Clean - removing unnecessary files/folders ..."/>
 		<delete dir="dist"/>
 	</target>
 	
