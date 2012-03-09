@@ -8,6 +8,7 @@ if [ "$TERM" == "screen" ]; then
 fi
 
 i=0; for h in ${HOSTS[@]}; do
+		echo copying properties for $h ...
         scp -r rebalance root@$h:$BASE_FOLDER
         scp /tmp/$h*.properties root@$h:$BASE_FOLDER/rebalance
 done
