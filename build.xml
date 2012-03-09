@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="system-configuration-tools" default="test-connection" basedir="." xmlns:ml="http://www.marklogic.com/ant">
 
-	<!--Set the property for xccstring used to connect to MarkLogic database
+	<!--Set the property for xccstring used to connect to MarkLogic database -->
 	<property name="xccstring" value="xcc://admin:admin@localhost:9999" />
-	-->
-	<property name="xccstring" value="xcc://q:q@localhost:9000" />
-	
+
+	<!-- property name="xccstring" value="xcc://q:q@localhost:9000" / -->
+
 	<property name="modules" value="Modules" />
 	<property name="lib-dir" value="lib/" />
 	<property name="destination.directory" value="/users/" />
@@ -74,10 +74,15 @@
 		<ml:query xccurl="${xccstring}">
 			<fileset file="resources/xquery/config/generate-xqsync-properties.xqy" />
 			<ml:paramset>
-				<ml:param name="INPUT-DATABASE" ns="" type="string" value="Documents" />
+				<!-- ml:param name="INPUT-DATABASE" ns="" type="string" value="Documents" />
 				<ml:param name="INPUT-PORT" ns="" type="string" value="9999" />
 				<ml:param name="OUTPUT-DATABASE" ns="" type="string" value="ForestRebalance" />
-				<ml:param name="OUTPUT-PORT" ns="" type="string" value="9998" />
+				<ml:param name="OUTPUT-PORT" ns="" type="string" value="9998" / -->
+
+				<ml:param name="INPUT-DATABASE" ns="" type="string" value="DCPP-Simulation-Source" />
+				<ml:param name="INPUT-PORT" ns="" type="string" value="8223" />
+				<ml:param name="OUTPUT-DATABASE" ns="" type="string" value="DCPP-Simulation-Target" />
+				<ml:param name="OUTPUT-PORT" ns="" type="string" value="8123" />
 			</ml:paramset>
 		</ml:query>
 	</target>
