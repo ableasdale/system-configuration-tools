@@ -3,13 +3,13 @@
 
 	<!-- DBA configured variables -->
 	
-	<property name="username" value="q" />
-	<property name="password" value="q" />
+	<property name="username" value="admin" />
+	<property name="password" value="admin" />
 	<property name="input-db" value="Documents" />
 	<property name="input-port" value="9999" />
 	<property name="output-db" value="DCPP" />
 	<property name="output-port" value="24021" />
-	<property name="modules" value="DCPP_Modules" />
+	<property name="modules" value="Modules" />
 	
 	<property name="xccstring" value="xcc://${username}:${password}@localhost:${output-port}" />
 
@@ -67,12 +67,12 @@
 		<echo message="Loading Rebalancer Application Modules" />
 		<ml:load xccurl="${xccstring}/${modules}">
 			<ml:docset>
-				<ml:permissionset>
+				<!-- ml:permissionset>
 					<ml:permission role="ODSExecuteReadRole" permission="execute" />
 					<ml:permission role="ODSInsertUpdateRole" permission="insert" />
 					<ml:permission role="ODSExecuteReadRole" permission="read" />
 					<ml:permission role="ODSInsertUpdateRole" permission="update" />
-				</ml:permissionset>
+				</ml:permissionset -->
 				<ml:collectionset>
 					<ml:collection name="rebalancer" />
 				</ml:collectionset>
