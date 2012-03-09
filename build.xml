@@ -2,9 +2,10 @@
 <project name="system-configuration-tools" default="test-connection" basedir="." xmlns:ml="http://www.marklogic.com/ant">
 
 	<!--Set the property for xccstring used to connect to MarkLogic database
-	<property name="xccstring" value="xcc://q:q@localhost:9000" />
-	-->
 	<property name="xccstring" value="xcc://admin:admin@localhost:9999" />
+	-->
+	<property name="xccstring" value="xcc://q:q@localhost:9000" />
+	
 	<property name="modules" value="Modules" />
 	<property name="lib-dir" value="lib/" />
 	<property name="destination.directory" value="/users/" />
@@ -53,7 +54,7 @@
 
 	<target name="install-rebalancer-modules" depends="delete-rebalancer-modules" description="Install XQSync rebalancer modules">
 		<echo message="Loading Rebalancer Application Modules" />
-		<ml:load xccurl="${xccstring}/Modules">
+		<ml:load xccurl="${xccstring}/${modules}">
 			<ml:docset>
 				<ml:permissionset>
 					<ml:permission role="execute-read-role" permission="execute" />
@@ -82,16 +83,16 @@
 	</target>
 
 	<target name="distribute-xqsync-runscripts" description="Distributes the XQSync jars, properties and runscripts to all hosts in the cluster" depends="create-xqsync-properties-files">
-		<echo message="Distributing XQSync..." />
+		<echo message="Distributing XQSync dependent files and .properties..." />
 		<exec executable="/bin/bash">
-			<arg value="resources/bash/configure.sh"/>
+			<arg value="resources/bash/configure.sh" />
 			<!-- arg value="/tmp"/ -->
 		</exec>
 	</target>
 
 	<target name="delete-rebalancer-modules" description="Removes unnecessary modules after the rebalancer process has run to completion">
 		<echo message="Deleting Application Modules" />
-		<ml:delete xccurl="${xccstring}/Modules" collections="rebalancer" failonerror="false" />
+		<ml:delete xccurl="${xccstring}/${modules}" collections="rebalancer" failonerror="false" />
 	</target>
 
 	<target name="clean-rebalancer">
@@ -102,7 +103,8 @@
 	<!--  END Forest rebalancer specific ANT Tasks -->
 
 	<target name="test-connection">
-		<ml:query xccurl="${xccstring}/Modules" query="xdmp:estimate(doc())" />
+		<echo message="Testing your xcc connection to: ${xccstring}" />
+		<ml:query xccurl="${xccstring}/${modules}" query="xdmp:estimate(doc())" />
 	</target>
 
 </project>
