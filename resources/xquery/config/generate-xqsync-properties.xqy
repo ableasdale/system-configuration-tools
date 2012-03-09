@@ -23,7 +23,7 @@ declare variable $OUTPUT-PORT as xs:string external;
 
 declare function local:get-forest-names($h) as xs:string {
 text {
-for $f in xdmp:database-forests(xdmp:database($INPUT-DATABASE))
+for $f in xdmp:database-forests(xdmp:database($OUTPUT-DATABASE))
 where xdmp:forest-status($f)/fs:host-id eq $h
 return
 xdmp:forest-name($f)}
