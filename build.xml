@@ -47,7 +47,8 @@
 		</ml:query>
 	</target>
 
-	<!-- target name="remove-custom-security-model" description="Removes the generic security model">
+	<!-- TODO - this target was never written; is this ever likely to be required? 
+	target name="remove-custom-security-model" description="Removes the generic security model">
 	</target -->
 
 	<!--  Forest rebalancer specific ANT Tasks -->
@@ -116,7 +117,7 @@
 	</target>
 
 	<target name="clean">
-		<echo message="Clean - removing all configuration files/folders from the cluster - excluding anything inside MarkLogic" />
+		<echo message="Clean - removing all configuration files/folders from the cluster filesystem" />
 		<delete dir="dist" />
 		<exec executable="/bin/bash">
 			<arg value="resources/bash/clean.sh" />
