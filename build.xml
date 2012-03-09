@@ -116,8 +116,13 @@
 	</target>
 
 	<target name="clean">
-		<echo message="Clean - removing unnecessary files/folders ..."/>
-		<delete dir="dist"/>
+		<echo message="Clean - removing all configuration files/folders from the cluster..." />
+		<delete dir="dist" />
+		<exec executable="/bin/bash">
+			<arg value="resources/bash/clean.sh" />
+			<arg value="${base-xqsync-folder}" />
+			<arg value="${cluster-hostlist}" />
+		</exec>
 	</target>
-	
+
 </project>
