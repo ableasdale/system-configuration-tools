@@ -96,25 +96,39 @@ declare function local:create-privileges() as empty-sequence() {
  :
  : This step is optional; DBAs may want to manually create these users
  :)
-declare function local:create-example-users() as xs:unsignedLong+ {
+declare function local:create-users() as xs:unsignedLong+ {
 (: Create Full Access User :)
-sec:create-user(
+(if(not($FULL-ACCESS-USER-NAME))
+then(sec:create-user(
                 $FULL-ACCESS-USER-NAME, 
                 $FULL-ACCESS-USER-DESCRIPTION,
                 $FULL-ACCESS-USER-PASSWORD,
-                ($INSERT-UPDATE-ROLE-NAME, $EXECUTE-READ-ROLE-NAME, $ELEVATED-MODULE-ROLE-NAME),
+                ($INSERT-UPDATE-ROLE-NAME, $EXECUTE-READ-ROLE-NAME),
                 (), (: permissions :)
                 () (: collections :)
-                ),
-(: Create Execute/Read User :)                
-sec:create-user(
+                ))
+else(0),
+(: Create Execute/Read User :)
+if(not($EXECUTE-READ-USER-NAME))                
+then(sec:create-user(
                 $EXECUTE-READ-USER-NAME, 
                 $EXECUTE-READ-USER-DESCRIPTION,
                 $EXECUTE-READ-USER-PASSWORD,
                 $EXECUTE-READ-ROLE-NAME,
                 (), (: permissions :)
                 () (: collections :)
-                )
+                ))
+else(0),
+if(not($NO-PERMS-USER-NAME))            
+then(sec:create-user(
+                $NO-PERMS-USER-NAME, 
+                $NO-PERMS-USER-DESCRIPTION,
+                $NO-PERMS-USER-PASSWORD,
+                (), (: roles :)
+                (), (: permissions :)
+                () (: collections :)
+                ))
+else(0))
 };
 
 (::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::)
