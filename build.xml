@@ -71,8 +71,6 @@
 	</target>
 
 	<target name="create-xqsync-properties-files" description="Generates the necessary .properties files for each host in the cluster so XQSync can run against each host and its local forests" depends="clean">
-		<echo message="creating dist folder ..." />
-		<mkdir dir="dist" />
 		<ml:query xccurl="${xccstring}">
 			<fileset file="resources/xquery/config/generate-xqsync-properties.xqy" />
 			<ml:paramset>
@@ -87,16 +85,17 @@
 				<ml:param name="OUTPUT-PORT" ns="" type="string" value="8123" />
 			</ml:paramset>
 		</ml:query>
-		<echo message="Done - cd into dist for the screen-commands file" />
 	</target>
 
 	<target name="distribute-xqsync-runscripts" description="Distributes the XQSync jars, properties and runscripts to all hosts in the cluster" depends="create-xqsync-properties-files">
+		<mkdir dir="dist" />
 		<echo message="Distributing XQSync dependent files and .properties..." />
 		<exec executable="/bin/bash">
 			<arg value="resources/bash/configure.sh" />
 			<arg value="${base-xqsync-folder}" />
 			<arg value="${cluster-hostlist}" />
 		</exec>
+		<echo message="Done - cd into dist for the screen-commands file" />
 	</target>
 
 	<target name="delete-rebalancer-modules" description="Removes unnecessary modules after the rebalancer process has run to completion">
