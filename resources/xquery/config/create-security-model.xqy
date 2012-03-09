@@ -7,6 +7,8 @@ xquery version "1.0-ml";
 
 import module namespace sec = "http://marklogic.com/xdmp/security" at "/MarkLogic/security.xqy";
 
+declare variable $STEP as xs:integer external;
+
 (: Specific Roles :)
 declare variable $INSERT-UPDATE-ROLE-NAME as xs:string := "ODSInsertUpdateRole";
 declare variable $INSERT-UPDATE-ROLE-DESCRIPTION as xs:string := "ODS Insert/Update Role";
@@ -23,7 +25,6 @@ declare variable $FULL-ACCESS-USER-PASSWORD as xs:string := "password";
 declare variable $EXECUTE-READ-USER-NAME as xs:string := "ODSExecuteAndReadUser";
 declare variable $EXECUTE-READ-USER-DESCRIPTION as xs:string := "ODS Execute/Read User";
 declare variable $EXECUTE-READ-USER-PASSWORD as xs:string := "password";
-
 
 
 (:~
