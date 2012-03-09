@@ -103,7 +103,7 @@
 		<ml:delete xccurl="${xccstring}/${modules}" collections="rebalancer" failonerror="false" />
 	</target>
 
-	<target name="clean-rebalancer" depends="clean" description="removes all files including the installed XQSync rebalancer module">
+	<target name="clean-rebalancer" description="removes all files including the installed XQSync rebalancer module" depends="clean">
 		<antcall target="delete-rebalancer-modules" />
 		<echo message="All Rebalancer Application Modules are now removed..." />
 	</target>
