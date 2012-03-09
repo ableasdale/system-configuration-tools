@@ -6,6 +6,7 @@
 
 	<property name="xccstring" value="xcc://q:q@localhost:9000" />
 
+	<property name="cluster-hostlist" value="ip-10-218-43-190 ip-10-102-37-236 ip-10-62-167-204 ip-10-62-215-29 ip-10-60-189-202 ip-10-218-79-223 ip-10-102-3-196" />
 	<property name="base-xqsync-folder" value="/mnt" />
 	<property name="modules" value="Modules" />
 	<property name="lib-dir" value="lib/" />
@@ -93,7 +94,7 @@
 		<exec executable="/bin/bash">
 			<arg value="resources/bash/configure.sh" />
 			<arg value="${base-xqsync-folder}" />
-			<arg value="(ip-10-218-43-190 ip-10-102-37-236 ip-10-62-167-204 ip-10-62-215-29 ip-10-60-189-202 ip-10-218-79-223 ip-10-102-3-196)" />
+			<arg value="${cluster-hostlist}" />
 		</exec>
 	</target>
 
