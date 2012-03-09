@@ -1,5 +1,5 @@
 HOSTS=(ip-10-218-43-190 ip-10-102-37-236 ip-10-62-167-204 ip-10-62-215-29 ip-10-60-189-202 ip-10-218-79-223 ip-10-102-3-196)
-BASE_FOLDER=$ARGV0
+BASE_FOLDER=$ARGV[0]
 
 # preflight
 if [ "$TERM" == "screen" ]; then
