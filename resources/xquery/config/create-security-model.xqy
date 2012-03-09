@@ -37,11 +37,13 @@ declare variable $EXECUTE-READ-USER-PASSWORD as xs:string := "password";
  :)
 declare function local:create-roles() as xs:unsignedLong+ {
     (: Create Insert/Update Role :)
-    sec:create-role($INSERT-UPDATE-ROLE-NAME,$INSERT-UPDATE-ROLE-DESCRIPTION,(),(),()),
+    (if(not(sec:role-exists($INSERT-UPDATE-ROLE-NAME))) 
+    then(sec:create-role($INSERT-UPDATE-ROLE-NAME,$INSERT-UPDATE-ROLE-DESCRIPTION,(),(),()))
+    else(0),
     (: Create Execute/Read Role :)
-    sec:create-role($EXECUTE-READ-ROLE-NAME,$EXECUTE-READ-ROLE-DESCRIPTION,(),(),()),
-    (: Create Elevated Rights Role :)
-    sec:create-role($ELEVATED-MODULE-ROLE-NAME,$ELEVATED-MODULE-ROLE-DESCRIPTION,(),(),())
+    if(not(sec:role-exists($EXECUTE-READ-ROLE-NAME)))
+    then(sec:create-role($EXECUTE-READ-ROLE-NAME,$EXECUTE-READ-ROLE-DESCRIPTION,(),(),()))
+    else(0))
 };
  
 (:~
@@ -69,17 +71,16 @@ declare function local:create-privileges() as empty-sequence() {
     sec:privilege-add-roles("http://marklogic.com/xdmp/privileges/xdmp-eval-in","execute",$EXECUTE-READ-ROLE-NAME),
     sec:privilege-add-roles("http://marklogic.com/xdmp/privileges/xdmp-invoke","execute",$EXECUTE-READ-ROLE-NAME),
     sec:privilege-add-roles("http://marklogic.com/xdmp/privileges/xdmp-invoke-in","execute",$EXECUTE-READ-ROLE-NAME),
-    (: Elevated Rights Privileges :)
-    sec:privilege-add-roles("http://marklogic.com/xdmp/privileges/admin-module-read","execute",$ELEVATED-MODULE-ROLE-NAME),
     let $permissions :=
         (
-            xdmp:permission($EXECUTE-READ-ROLE-NAME,"read") 
+            xdmp:permission($EXECUTE-READ-ROLE-NAME,"read"),
+            xdmp:permission($EXECUTE-READ-ROLE-NAME,"execute") 
         )
     return
        sec:role-set-default-permissions($EXECUTE-READ-ROLE-NAME,$permissions),  
     let $permissions := 
         (
-            xdmp:permission($INSERT-UPDATE-ROLE-NAME,"read"),
+            xdmp:permission($INSERT-UPDATE-ROLE-NAME,"insert"),
             xdmp:permission($INSERT-UPDATE-ROLE-NAME,"update")
         )
     return
@@ -96,6 +97,8 @@ declare function local:create-privileges() as empty-sequence() {
  :
  : This step is optional; DBAs may want to manually create these users
  :)
+ 
+ 
 declare function local:create-users() as xs:unsignedLong+ {
 (: Create Full Access User :)
 (if(not($FULL-ACCESS-USER-NAME))
@@ -130,6 +133,7 @@ then(sec:create-user(
                 ))
 else(0))
 };
+
 
 (::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::)
 (:                          Module Actions Below                          :) 
