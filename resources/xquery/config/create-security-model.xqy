@@ -116,19 +116,14 @@ sec:create-user(
                 )
 };
 
-
 (::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::)
-(:                  Main DBA Module Actions Below                     :) 
+(:                          Module Actions Below                          :) 
 (::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::)
 
-(: Step One 
-local:create-roles()
-:)
-
-(: Step Two 
-local:create-privileges() 
-:)
-
-(: Step Three (Optional - you may want to create these users manually) 
-local:create-example-users()
-:)
+if ($STEP eq 1) 
+    then(local:create-roles())
+else if($STEP eq 2)
+    then(local:create-privileges())
+else if($STEP eq 3)
+    then(local:create-users())
+else()  
