@@ -1,33 +1,29 @@
 xquery version "1.0-ml";
-
 (:~ 
- : Security Module for creating the Generic Database Users and roles
+ : Security Module for creating the Generic ODS Database Users and roles
  :
  : @version 1.0
  :)
 
 import module namespace sec = "http://marklogic.com/xdmp/security" at "/MarkLogic/security.xqy";
 
-declare variable $STEP as xs:integer external;
-
 (: Specific Roles :)
-declare variable $INSERT-UPDATE-ROLE-NAME as xs:string := "insert-update-role";
-declare variable $INSERT-UPDATE-ROLE-DESCRIPTION as xs:string := "Database Insert/Update Role";
-declare variable $EXECUTE-READ-ROLE-NAME as xs:string := "execute-read-role";
-declare variable $EXECUTE-READ-ROLE-DESCRIPTION as xs:string := "Database Execute/Read Role";
+declare variable $INSERT-UPDATE-ROLE-NAME as xs:string := "ODSInsertUpdateRole";
+declare variable $INSERT-UPDATE-ROLE-DESCRIPTION as xs:string := "ODS Insert/Update Role";
+declare variable $EXECUTE-READ-ROLE-NAME as xs:string := "ODSExecuteReadRole";
+declare variable $EXECUTE-READ-ROLE-DESCRIPTION as xs:string := "ODS Execute/Read Role";
+declare variable $ELEVATED-MODULE-ROLE-NAME as xs:string := "ODSDataWarehouseReadRole";
+declare variable $ELEVATED-MODULE-ROLE-DESCRIPTION as xs:string := "ODS User Elevated Permissions Role";
 
 (: Users :)
-declare variable $NO-PERMS-USER-NAME as xs:string := "no-perms";
-declare variable $NO-PERMS-USER-DESCRIPTION as xs:string := "No Permissions Test User";
-declare variable $NO-PERMS-USER-PASSWORD as xs:string := "password";
-
-declare variable $FULL-ACCESS-USER-NAME as xs:string := "full-user";
-declare variable $FULL-ACCESS-USER-DESCRIPTION as xs:string := "Database Full Access User";
+declare variable $FULL-ACCESS-USER-NAME as xs:string := "ODSFullAccessUser";
+declare variable $FULL-ACCESS-USER-DESCRIPTION as xs:string := "ODS Full Access User";
 declare variable $FULL-ACCESS-USER-PASSWORD as xs:string := "password";
 
-declare variable $EXECUTE-READ-USER-NAME as xs:string := "execute-read-user";
-declare variable $EXECUTE-READ-USER-DESCRIPTION as xs:string := "Database Execute / Read User";
+declare variable $EXECUTE-READ-USER-NAME as xs:string := "ODSExecuteAndReadUser";
+declare variable $EXECUTE-READ-USER-DESCRIPTION as xs:string := "ODS Execute/Read User";
 declare variable $EXECUTE-READ-USER-PASSWORD as xs:string := "password";
+
 
 
 (:~
@@ -40,13 +36,11 @@ declare variable $EXECUTE-READ-USER-PASSWORD as xs:string := "password";
  :)
 declare function local:create-roles() as xs:unsignedLong+ {
     (: Create Insert/Update Role :)
-    (if(not(sec:role-exists($INSERT-UPDATE-ROLE-NAME))) 
-    then(sec:create-role($INSERT-UPDATE-ROLE-NAME,$INSERT-UPDATE-ROLE-DESCRIPTION,(),(),()))
-    else(0),
+    sec:create-role($INSERT-UPDATE-ROLE-NAME,$INSERT-UPDATE-ROLE-DESCRIPTION,(),(),()),
     (: Create Execute/Read Role :)
-    if(not(sec:role-exists($EXECUTE-READ-ROLE-NAME)))
-    then(sec:create-role($EXECUTE-READ-ROLE-NAME,$EXECUTE-READ-ROLE-DESCRIPTION,(),(),()))
-    else(0))
+    sec:create-role($EXECUTE-READ-ROLE-NAME,$EXECUTE-READ-ROLE-DESCRIPTION,(),(),()),
+    (: Create Elevated Rights Role :)
+    sec:create-role($ELEVATED-MODULE-ROLE-NAME,$ELEVATED-MODULE-ROLE-DESCRIPTION,(),(),())
 };
  
 (:~
@@ -74,16 +68,17 @@ declare function local:create-privileges() as empty-sequence() {
     sec:privilege-add-roles("http://marklogic.com/xdmp/privileges/xdmp-eval-in","execute",$EXECUTE-READ-ROLE-NAME),
     sec:privilege-add-roles("http://marklogic.com/xdmp/privileges/xdmp-invoke","execute",$EXECUTE-READ-ROLE-NAME),
     sec:privilege-add-roles("http://marklogic.com/xdmp/privileges/xdmp-invoke-in","execute",$EXECUTE-READ-ROLE-NAME),
+    (: Elevated Rights Privileges :)
+    sec:privilege-add-roles("http://marklogic.com/xdmp/privileges/admin-module-read","execute",$ELEVATED-MODULE-ROLE-NAME),
     let $permissions :=
         (
-            xdmp:permission($EXECUTE-READ-ROLE-NAME,"read"),
-            xdmp:permission($EXECUTE-READ-ROLE-NAME,"execute") 
+            xdmp:permission($EXECUTE-READ-ROLE-NAME,"read") 
         )
     return
        sec:role-set-default-permissions($EXECUTE-READ-ROLE-NAME,$permissions),  
     let $permissions := 
         (
-            xdmp:permission($INSERT-UPDATE-ROLE-NAME,"insert"),
+            xdmp:permission($INSERT-UPDATE-ROLE-NAME,"read"),
             xdmp:permission($INSERT-UPDATE-ROLE-NAME,"update")
         )
     return
@@ -100,52 +95,40 @@ declare function local:create-privileges() as empty-sequence() {
  :
  : This step is optional; DBAs may want to manually create these users
  :)
- 
- 
-declare function local:create-users() as xs:unsignedLong+ {
+declare function local:create-example-users() as xs:unsignedLong+ {
 (: Create Full Access User :)
-(if(not($FULL-ACCESS-USER-NAME))
-then(sec:create-user(
+sec:create-user(
                 $FULL-ACCESS-USER-NAME, 
                 $FULL-ACCESS-USER-DESCRIPTION,
                 $FULL-ACCESS-USER-PASSWORD,
-                ($INSERT-UPDATE-ROLE-NAME, $EXECUTE-READ-ROLE-NAME),
+                ($INSERT-UPDATE-ROLE-NAME, $EXECUTE-READ-ROLE-NAME, $ELEVATED-MODULE-ROLE-NAME),
                 (), (: permissions :)
                 () (: collections :)
-                ))
-else(0),
-(: Create Execute/Read User :)
-if(not($EXECUTE-READ-USER-NAME))                
-then(sec:create-user(
+                ),
+(: Create Execute/Read User :)                
+sec:create-user(
                 $EXECUTE-READ-USER-NAME, 
                 $EXECUTE-READ-USER-DESCRIPTION,
                 $EXECUTE-READ-USER-PASSWORD,
                 $EXECUTE-READ-ROLE-NAME,
                 (), (: permissions :)
                 () (: collections :)
-                ))
-else(0),
-if(not($NO-PERMS-USER-NAME))            
-then(sec:create-user(
-                $NO-PERMS-USER-NAME, 
-                $NO-PERMS-USER-DESCRIPTION,
-                $NO-PERMS-USER-PASSWORD,
-                (), (: roles :)
-                (), (: permissions :)
-                () (: collections :)
-                ))
-else(0))
+                )
 };
 
 
 (::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::)
-(:                          Module Actions Below                          :) 
+(:                  Main DBA Module Actions Below                     :) 
 (::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::)
 
-if ($STEP eq 1) 
-    then(local:create-roles())
-else if($STEP eq 2)
-    then(local:create-privileges())
-else if($STEP eq 3)
-    then(local:create-users())
-else()  
+(: Step One 
+local:create-roles()
+:)
+
+(: Step Two 
+local:create-privileges() 
+:)
+
+(: Step Three (Optional - you may want to create these users manually) 
+local:create-example-users()
+:)

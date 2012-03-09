@@ -11,6 +11,10 @@ declare namespace fs="http://marklogic.com/xdmp/status/forest";
 import module namespace admin = 'http://marklogic.com/xdmp/admin'
           at '/MarkLogic/admin.xqy';
 
+
+declare variable $USER as xs:string external;
+declare variable $PASS as xs:string external;
+
 declare variable $INPUT-DATABASE as xs:string external;
 declare variable $INPUT-PORT as xs:string external;
 
@@ -41,8 +45,8 @@ concat(string-join((
     replace(
        replace(
            concat(
-            concat('INPUT_CONNECTION_STRING=xcc://admin:admin@host-name:',$INPUT-PORT,'/',$INPUT-DATABASE, codepoints-to-string(10)),
-            concat('OUTPUT_CONNECTION_STRING=xcc://admin:admin@host-name:',$OUTPUT-PORT,'/',$OUTPUT-DATABASE),'
+            concat('INPUT_CONNECTION_STRING=xcc://',$USER,':',$PASS,'@host-name:',$INPUT-PORT,'/',$INPUT-DATABASE, codepoints-to-string(10)),
+            concat('OUTPUT_CONNECTION_STRING=xcc://',$USER,':',$PASS,'@host-name:',$OUTPUT-PORT,'/',$OUTPUT-DATABASE),'
 INPUT_QUERY=cts:uris("", ("document"), (), (), (forest))
 COPY_PERMISSIONS=false
 ALLOW_EMPTY_METADATA=true
@@ -51,8 +55,8 @@ PRINT_CURRENT_RATE=true
 HASH_MODULE=computehash.xqy
 FATAL_ERRORS=false
 
-READ_PERMISSION_ROLES=execute-read-role
-UPDATE_PERMISSION_ROLES=insert-update-role
+READ_PERMISSION_ROLES=ODSExecuteReadRole
+UPDATE_PERMISSION_ROLES=ODSInsertUpdateRole
 
 INPUT_BATCH_SIZE=10
 USE_IN_FOREST_EVAL=true'),

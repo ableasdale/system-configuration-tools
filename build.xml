@@ -1,18 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="system-configuration-tools" default="test-connection" basedir="." xmlns:ml="http://www.marklogic.com/ant">
 
-	<!--Set the property for xccstring used to connect to MarkLogic database 
-	<property name="xccstring" value="xcc://admin:admin@localhost:9999" -->
-
-	<property name="xccstring" value="xcc://q:q@localhost:9000" />
+	<!-- DBA configured variables -->
+	
+	<property name="username" value="q" />
+	<property name="password" value="q" />
+	<property name="input-db" value="Documents" />
+	<property name="input-port" value="9999" />
+	<property name="output-db" value="DCPP" />
+	<property name="output-port" value="24021" />
+	<property name="modules" value="DCPP_Modules" />
+	
+	<property name="xccstring" value="xcc://${username}:${password}@localhost:${output-port}" />
 
 	<property name="cluster-hostlist" value="ip-10-218-43-190 ip-10-102-37-236 ip-10-62-167-204 ip-10-62-215-29 ip-10-60-189-202 ip-10-218-79-223 ip-10-102-3-196" />
 	<property name="base-xqsync-folder" value="/mnt" />
-	<property name="modules" value="Modules" />
-	<property name="lib-dir" value="lib/" />
-
+	
+	<!-- End of DBA configured variables -->
+	
+	
+	<!-- Targets and other config below -->
+	
 	<path id="mlant-classpath">
-		<fileset dir="${lib-dir}">
+		<fileset dir="lib/">
 			<include name="xcc.jar" />
 			<include name="mlant.jar" />
 			<include name="saxon.jar" />
@@ -58,10 +68,10 @@
 		<ml:load xccurl="${xccstring}/${modules}">
 			<ml:docset>
 				<ml:permissionset>
-					<ml:permission role="execute-read-role" permission="execute" />
-					<ml:permission role="insert-update-role" permission="insert" />
-					<ml:permission role="execute-read-role" permission="read" />
-					<ml:permission role="insert-update-role" permission="update" />
+					<ml:permission role="ODSExecuteReadRole" permission="execute" />
+					<ml:permission role="ODSInsertUpdateRole" permission="insert" />
+					<ml:permission role="ODSExecuteReadRole" permission="read" />
+					<ml:permission role="ODSInsertUpdateRole" permission="update" />
 				</ml:permissionset>
 				<ml:collectionset>
 					<ml:collection name="rebalancer" />
@@ -75,20 +85,18 @@
 		<ml:query xccurl="${xccstring}">
 			<fileset file="resources/xquery/config/generate-xqsync-properties.xqy" />
 			<ml:paramset>
-				<!-- ml:param name="INPUT-DATABASE" ns="" type="string" value="Documents" />
-				<ml:param name="INPUT-PORT" ns="" type="string" value="9999" />
-				<ml:param name="OUTPUT-DATABASE" ns="" type="string" value="ForestRebalance" />
-				<ml:param name="OUTPUT-PORT" ns="" type="string" value="9998" / -->
-
-				<ml:param name="INPUT-DATABASE" ns="" type="string" value="DCPP-Simulation-Source" />
-				<ml:param name="INPUT-PORT" ns="" type="string" value="8223" />
-				<ml:param name="OUTPUT-DATABASE" ns="" type="string" value="DCPP-Simulation-Target" />
-				<ml:param name="OUTPUT-PORT" ns="" type="string" value="8123" />
+				<ml:param name="USER" ns="" type="string" value="${username}" />
+				<ml:param name="PASS" ns="" type="string" value="${password}" />
+				<ml:param name="INPUT-DATABASE" ns="" type="string" value="${input-db}" />
+				<ml:param name="INPUT-PORT" ns="" type="string" value="${input-port}" />
+				<ml:param name="OUTPUT-DATABASE" ns="" type="string" value="${output-db}" />
+				<ml:param name="OUTPUT-PORT" ns="" type="string" value="${output-port}" />
 			</ml:paramset>
 		</ml:query>
 	</target>
 
 	<target name="distribute-xqsync-runscripts" description="Distributes the XQSync jars, properties and runscripts to all hosts in the cluster" depends="create-xqsync-properties-files">
+		<chmod file="rebalance/run.sh" perm="a+rx"/>
 		<mkdir dir="dist" />
 		<echo message="Distributing XQSync dependent files and .properties..." />
 		<exec executable="/bin/bash">
