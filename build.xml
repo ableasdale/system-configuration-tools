@@ -10,8 +10,6 @@
 	<property name="base-xqsync-folder" value="/mnt" />
 	<property name="modules" value="Modules" />
 	<property name="lib-dir" value="lib/" />
-	<property name="destination.directory" value="/users/" />
-	<property name="call.to.jvm" value="java -Xincgc" />
 
 	<path id="mlant-classpath">
 		<fileset dir="${lib-dir}">
