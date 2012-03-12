@@ -18,7 +18,6 @@ declare variable $ELEVATED-MODULE-ROLE-NAME as xs:string := "ODSDataWarehouseRea
 declare variable $ELEVATED-MODULE-ROLE-DESCRIPTION as xs:string := "ODS User Elevated Permissions Role";
 
 (: Users :)
-(: Users :)
 declare variable $FULL-ACCESS-USER-NAME as xs:string := "ODSFullAccessUser";
 declare variable $FULL-ACCESS-USER-DESCRIPTION as xs:string := "ODS Full Access User";
 declare variable $FULL-ACCESS-USER-PASSWORD as xs:string := "password";
