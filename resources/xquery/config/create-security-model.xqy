@@ -11,15 +11,26 @@ declare variable $STEP as xs:integer external;
 
 (: Specific Roles :)
 declare variable $INSERT-UPDATE-ROLE-NAME as xs:string := "ODSInsertUpdateRole";
-declare variable $INSERT-UPDATE-ROLE-DESCRIPTION as xs:string := "Database Insert/Update Role";
+declare variable $INSERT-UPDATE-ROLE-DESCRIPTION as xs:string := "ODS Insert/Update Role";
 declare variable $EXECUTE-READ-ROLE-NAME as xs:string := "ODSExecuteReadRole";
-declare variable $EXECUTE-READ-ROLE-DESCRIPTION as xs:string := "Database Execute/Read Role";
+declare variable $EXECUTE-READ-ROLE-DESCRIPTION as xs:string := "ODS Execute/Read Role";
+declare variable $ELEVATED-MODULE-ROLE-NAME as xs:string := "ODSDataWarehouseReadRole";
+declare variable $ELEVATED-MODULE-ROLE-DESCRIPTION as xs:string := "ODS User Elevated Permissions Role";
 
 (: Users :)
+(: Users :)
+declare variable $FULL-ACCESS-USER-NAME as xs:string := "ODSFullAccessUser";
+declare variable $FULL-ACCESS-USER-DESCRIPTION as xs:string := "ODS Full Access User";
+declare variable $FULL-ACCESS-USER-PASSWORD as xs:string := "password";
+
+declare variable $EXECUTE-READ-USER-NAME as xs:string := "ODSExecuteAndReadUser";
+declare variable $EXECUTE-READ-USER-DESCRIPTION as xs:string := "ODS Execute/Read User";
+declare variable $EXECUTE-READ-USER-PASSWORD as xs:string := "password";
+
 declare variable $NO-PERMS-USER-NAME as xs:string := "no-perms";
 declare variable $NO-PERMS-USER-DESCRIPTION as xs:string := "No Permissions Test User";
 declare variable $NO-PERMS-USER-PASSWORD as xs:string := "password";
-
+(:
 declare variable $FULL-ACCESS-USER-NAME as xs:string := "full-user";
 declare variable $FULL-ACCESS-USER-DESCRIPTION as xs:string := "Database Full Access User";
 declare variable $FULL-ACCESS-USER-PASSWORD as xs:string := "password";
@@ -27,7 +38,7 @@ declare variable $FULL-ACCESS-USER-PASSWORD as xs:string := "password";
 declare variable $EXECUTE-READ-USER-NAME as xs:string := "execute-read-user";
 declare variable $EXECUTE-READ-USER-DESCRIPTION as xs:string := "Database Execute / Read User";
 declare variable $EXECUTE-READ-USER-PASSWORD as xs:string := "password";
-
+:)
 
 (:~
  : Function to create the new Database access roles:
@@ -45,6 +56,10 @@ declare function local:create-roles() as xs:unsignedLong+ {
     (: Create Execute/Read Role :)
     if(not(sec:role-exists($EXECUTE-READ-ROLE-NAME)))
     then(sec:create-role($EXECUTE-READ-ROLE-NAME,$EXECUTE-READ-ROLE-DESCRIPTION,(),(),()))
+    else(0),
+    (: Create Elevated Rights Role :)
+    if(not(sec:role-exists($ELEVATED-MODULE-ROLE-NAME)))
+    then(sec:create-role($ELEVATED-MODULE-ROLE-NAME,$ELEVATED-MODULE-ROLE-DESCRIPTION,(),(),()))
     else(0))
 };
  
@@ -73,16 +88,17 @@ declare function local:create-privileges() as empty-sequence() {
     sec:privilege-add-roles("http://marklogic.com/xdmp/privileges/xdmp-eval-in","execute",$EXECUTE-READ-ROLE-NAME),
     sec:privilege-add-roles("http://marklogic.com/xdmp/privileges/xdmp-invoke","execute",$EXECUTE-READ-ROLE-NAME),
     sec:privilege-add-roles("http://marklogic.com/xdmp/privileges/xdmp-invoke-in","execute",$EXECUTE-READ-ROLE-NAME),
+    (: Elevated Rights Privileges :)
+    sec:privilege-add-roles("http://marklogic.com/xdmp/privileges/admin-module-read","execute",$ELEVATED-MODULE-ROLE-NAME),
     let $permissions :=
         (
-            xdmp:permission($EXECUTE-READ-ROLE-NAME,"read"),
-            xdmp:permission($EXECUTE-READ-ROLE-NAME,"execute") 
+            xdmp:permission($EXECUTE-READ-ROLE-NAME,"read") 
         )
     return
        sec:role-set-default-permissions($EXECUTE-READ-ROLE-NAME,$permissions),  
     let $permissions := 
         (
-            xdmp:permission($INSERT-UPDATE-ROLE-NAME,"insert"),
+            xdmp:permission($INSERT-UPDATE-ROLE-NAME,"read"),
             xdmp:permission($INSERT-UPDATE-ROLE-NAME,"update")
         )
     return

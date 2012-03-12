@@ -2,25 +2,25 @@
 <project name="system-configuration-tools" default="test-connection" basedir="." xmlns:ml="http://www.marklogic.com/ant">
 
 	<!-- DBA configured variables -->
-	
+
 	<property name="username" value="admin" />
 	<property name="password" value="admin" />
 	<property name="input-db" value="Documents" />
 	<property name="input-port" value="9999" />
-	<property name="output-db" value="DCPP" />
+	<property name="output-db" value="ForestRebalance" />
 	<property name="output-port" value="24021" />
 	<property name="modules" value="Modules" />
-	
+
 	<property name="xccstring" value="xcc://${username}:${password}@localhost:${output-port}" />
 
 	<property name="cluster-hostlist" value="ip-10-218-43-190 ip-10-102-37-236 ip-10-62-167-204 ip-10-62-215-29 ip-10-60-189-202 ip-10-218-79-223 ip-10-102-3-196" />
 	<property name="base-xqsync-folder" value="/mnt" />
-	
+
 	<!-- End of DBA configured variables -->
-	
-	
+
+
 	<!-- Targets and other config below -->
-	
+
 	<path id="mlant-classpath">
 		<fileset dir="lib/">
 			<include name="xcc.jar" />
@@ -41,10 +41,10 @@
 		<antcall target="administer-security-model">
 			<param name="param" value="2" />
 		</antcall>
-		<!-- Create Users -->
+		<!-- Create Users 
 		<antcall target="administer-security-model">
 			<param name="param" value="3" />
-		</antcall>
+		</antcall> -->
 	</target>
 
 	<target name="administer-security-model">
@@ -67,12 +67,12 @@
 		<echo message="Loading Rebalancer Application Modules" />
 		<ml:load xccurl="${xccstring}/${modules}">
 			<ml:docset>
-				<!-- ml:permissionset>
+				<ml:permissionset>
 					<ml:permission role="ODSExecuteReadRole" permission="execute" />
 					<ml:permission role="ODSInsertUpdateRole" permission="insert" />
 					<ml:permission role="ODSExecuteReadRole" permission="read" />
 					<ml:permission role="ODSInsertUpdateRole" permission="update" />
-				</ml:permissionset -->
+				</ml:permissionset>
 				<ml:collectionset>
 					<ml:collection name="rebalancer" />
 				</ml:collectionset>
@@ -96,7 +96,7 @@
 	</target>
 
 	<target name="distribute-xqsync-runscripts" description="Distributes the XQSync jars, properties and runscripts to all hosts in the cluster" depends="create-xqsync-properties-files">
-		<chmod file="rebalance/run.sh" perm="a+rx"/>
+		<chmod file="rebalance/run.sh" perm="a+rx" />
 		<mkdir dir="dist" />
 		<echo message="Distributing XQSync dependent files and .properties..." />
 		<exec executable="/bin/bash">
