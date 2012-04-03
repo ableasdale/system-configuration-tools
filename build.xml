@@ -5,15 +5,15 @@
 
 	<property name="username" value="admin" />
 	<property name="password" value="admin" />
-	<property name="input-db" value="Documents" />
+	<property name="input-db" value="Input" />
 	<property name="input-port" value="9999" />
-	<property name="output-db" value="ForestRebalance" />
-	<property name="output-port" value="24021" />
+	<property name="output-db" value="Output" />
+	<property name="output-port" value="9998" />
 	<property name="modules" value="Modules" />
 
 	<property name="xccstring" value="xcc://${username}:${password}@localhost:${output-port}" />
 
-	<property name="cluster-hostlist" value="ip-10-218-43-190 ip-10-102-37-236 ip-10-62-167-204 ip-10-62-215-29 ip-10-60-189-202 ip-10-218-79-223 ip-10-102-3-196" />
+	<property name="cluster-hostlist" value="host1 host2 host3 etc" />
 	<property name="base-xqsync-folder" value="/mnt" />
 
 	<!-- End of DBA configured variables -->
@@ -68,10 +68,10 @@
 		<ml:load xccurl="${xccstring}/${modules}">
 			<ml:docset>
 				<ml:permissionset>
-					<ml:permission role="ODSExecuteReadRole" permission="execute" />
-					<ml:permission role="ODSInsertUpdateRole" permission="insert" />
-					<ml:permission role="ODSExecuteReadRole" permission="read" />
-					<ml:permission role="ODSInsertUpdateRole" permission="update" />
+					<ml:permission role="execute-read-role" permission="execute" />
+					<ml:permission role="insert-update-role" permission="insert" />
+					<ml:permission role="execute-read-role" permission="read" />
+					<ml:permission role="insert-update-role" permission="update" />
 				</ml:permissionset>
 				<ml:collectionset>
 					<ml:collection name="rebalancer" />
