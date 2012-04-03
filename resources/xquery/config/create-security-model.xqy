@@ -10,26 +10,14 @@ import module namespace sec = "http://marklogic.com/xdmp/security" at "/MarkLogi
 declare variable $STEP as xs:integer external;
 
 (: Specific Roles :)
-declare variable $INSERT-UPDATE-ROLE-NAME as xs:string := "ODSInsertUpdateRole";
-declare variable $INSERT-UPDATE-ROLE-DESCRIPTION as xs:string := "ODS Insert/Update Role";
-declare variable $EXECUTE-READ-ROLE-NAME as xs:string := "ODSExecuteReadRole";
-declare variable $EXECUTE-READ-ROLE-DESCRIPTION as xs:string := "ODS Execute/Read Role";
-declare variable $ELEVATED-MODULE-ROLE-NAME as xs:string := "ODSDataWarehouseReadRole";
-declare variable $ELEVATED-MODULE-ROLE-DESCRIPTION as xs:string := "ODS User Elevated Permissions Role";
+declare variable $INSERT-UPDATE-ROLE-NAME as xs:string := "insert-update-role";
+declare variable $INSERT-UPDATE-ROLE-DESCRIPTION as xs:string := "Application Insert/Update Role";
+declare variable $EXECUTE-READ-ROLE-NAME as xs:string := "execute-read-role";
+declare variable $EXECUTE-READ-ROLE-DESCRIPTION as xs:string := "Application Execute/Read Role";
+declare variable $ELEVATED-MODULE-ROLE-NAME as xs:string := "extra-privs-role";
+declare variable $ELEVATED-MODULE-ROLE-DESCRIPTION as xs:string := "Application User Elevated Permissions Role";
 
 (: Users :)
-declare variable $FULL-ACCESS-USER-NAME as xs:string := "ODSFullAccessUser";
-declare variable $FULL-ACCESS-USER-DESCRIPTION as xs:string := "ODS Full Access User";
-declare variable $FULL-ACCESS-USER-PASSWORD as xs:string := "password";
-
-declare variable $EXECUTE-READ-USER-NAME as xs:string := "ODSExecuteAndReadUser";
-declare variable $EXECUTE-READ-USER-DESCRIPTION as xs:string := "ODS Execute/Read User";
-declare variable $EXECUTE-READ-USER-PASSWORD as xs:string := "password";
-
-declare variable $NO-PERMS-USER-NAME as xs:string := "no-perms";
-declare variable $NO-PERMS-USER-DESCRIPTION as xs:string := "No Permissions Test User";
-declare variable $NO-PERMS-USER-PASSWORD as xs:string := "password";
-(:
 declare variable $FULL-ACCESS-USER-NAME as xs:string := "full-user";
 declare variable $FULL-ACCESS-USER-DESCRIPTION as xs:string := "Database Full Access User";
 declare variable $FULL-ACCESS-USER-PASSWORD as xs:string := "password";
@@ -37,7 +25,10 @@ declare variable $FULL-ACCESS-USER-PASSWORD as xs:string := "password";
 declare variable $EXECUTE-READ-USER-NAME as xs:string := "execute-read-user";
 declare variable $EXECUTE-READ-USER-DESCRIPTION as xs:string := "Database Execute / Read User";
 declare variable $EXECUTE-READ-USER-PASSWORD as xs:string := "password";
-:)
+
+declare variable $NO-PERMS-USER-NAME as xs:string := "no-perms";
+declare variable $NO-PERMS-USER-DESCRIPTION as xs:string := "No Permissions Test User";
+declare variable $NO-PERMS-USER-PASSWORD as xs:string := "password";
 
 (:~
  : Function to create the new Database access roles:
