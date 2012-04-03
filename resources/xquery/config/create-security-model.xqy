@@ -1,6 +1,6 @@
 xquery version "1.0-ml";
 (:~ 
- : Security Module for creating the Generic ODS Database Users and roles
+ : Security Module for creating the Generic Application / Database Users and roles
  :
  : @version 1.0
  :)
@@ -64,11 +64,13 @@ declare function local:create-roles() as xs:unsignedLong+ {
  : </ul>
  :) 
 declare function local:create-privileges() as empty-sequence() {
+    
     (: Insert/Update Privileges :)
     sec:privilege-add-roles("http://marklogic.com/xdmp/privileges/any-collection","execute",$INSERT-UPDATE-ROLE-NAME),
     sec:privilege-add-roles("http://marklogic.com/xdmp/privileges/any-uri","execute",$INSERT-UPDATE-ROLE-NAME),
     sec:privilege-add-roles("http://marklogic.com/xdmp/privileges/unprotected-collections","execute",$INSERT-UPDATE-ROLE-NAME),
     sec:privilege-add-roles("http://marklogic.com/xdmp/privileges/xdbc-insert","execute",$INSERT-UPDATE-ROLE-NAME),        
+    
     (: Execute/Read Privileges :)
     sec:privilege-add-roles("http://marklogic.com/xdmp/privileges/xdbc-eval","execute",$EXECUTE-READ-ROLE-NAME),
     sec:privilege-add-roles("http://marklogic.com/xdmp/privileges/xdbc-eval-in","execute",$EXECUTE-READ-ROLE-NAME),
@@ -78,6 +80,7 @@ declare function local:create-privileges() as empty-sequence() {
     sec:privilege-add-roles("http://marklogic.com/xdmp/privileges/xdmp-eval-in","execute",$EXECUTE-READ-ROLE-NAME),
     sec:privilege-add-roles("http://marklogic.com/xdmp/privileges/xdmp-invoke","execute",$EXECUTE-READ-ROLE-NAME),
     sec:privilege-add-roles("http://marklogic.com/xdmp/privileges/xdmp-invoke-in","execute",$EXECUTE-READ-ROLE-NAME),
+    
     (: Elevated Rights Privileges :)
     sec:privilege-add-roles("http://marklogic.com/xdmp/privileges/admin-module-read","execute",$ELEVATED-MODULE-ROLE-NAME),
     let $permissions :=
