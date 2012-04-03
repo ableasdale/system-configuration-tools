@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="system-configuration-tools" default="test-connection" basedir="." xmlns:ml="http://www.marklogic.com/ant">
 
-	<!-- DBA configured variables -->
+	<!-- App configured variables -->
 
 	<property name="username" value="admin" />
 	<property name="password" value="admin" />
 	<property name="input-db" value="Input" />
-	<property name="input-port" value="9999" />
+	<property name="input-port" value="9998" />
 	<property name="output-db" value="Output" />
-	<property name="output-port" value="9998" />
+	<property name="output-port" value="9999" />
 	<property name="modules" value="Modules" />
 
 	<property name="xccstring" value="xcc://${username}:${password}@localhost:${output-port}" />
@@ -16,7 +16,7 @@
 	<property name="cluster-hostlist" value="host1 host2 host3 etc" />
 	<property name="base-xqsync-folder" value="/mnt" />
 
-	<!-- End of DBA configured variables -->
+	<!-- End of App configured variables -->
 
 
 	<!-- Targets and other config below -->
